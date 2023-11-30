@@ -1,18 +1,22 @@
 <script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
+  import { ref } from 'vue';
+
+  const emit = defineEmits(['submitTitle'])
+
+
+  const title = ref("The Snazzy Burger")
+
+  function handleEmit(){
+    emit('submitTitle',title.value)
+  }
 </script>
 
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
-  </div>
+  <h1>{{ title }}</h1>
+  <p>
+    <input type="text" v-model="title">
+    <button @click="handleEmit">Place Order</button>
+  </p>
 </template>
 
 <style scoped>

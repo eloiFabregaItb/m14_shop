@@ -1,47 +1,59 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Title from './components/Title.vue'
+import Product from './components/Product.vue'
+import CurrencySelector from './components/CurrencySelector.vue'
+import Cart from './components/Cart.vue'
+import type { currencyType, itemType, itemCartType} from './types'
+import { ref } from 'vue'
+import { currencys, items} from './constants'
+
+  const currency = ref(currencys[0])
+
+  const cart = ref<itemCartType[]>(items.map(x=>({...x,amount:0})))
+
+  function handleNewTitle(title:string){
+    alert("NEW TITLE " + title)
+  }
+
+  function handleAddToCart(item:itemType){
+    alert("ITEM "+item.name+" added to cart")
+    const it = cart.value.find(x=>x.id===item.id)
+    if(it){
+      it.amount++
+    }
+  }
+
+  function handleChangeCurrency(curr:currencyType){
+    currency.value=curr;
+  }
+
+
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+  <Title @submitTitle="handleNewTitle"/>
 
-  <main>
-    <TheWelcome />
-  </main>
+  <CurrencySelector @changeCurrency="handleChangeCurrency" />
+
+  <section class="itemList">
+    <Product v-for="item in items"
+      :currency="currency"
+      :item="item"
+      @addToCart="handleAddToCart"
+    />
+
+  </section>
+  
+  <Cart :cartList="cart" :currency="currency" />
+
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .itemList{
+    display: grid;
+    gap:1rem;
+    grid-template-columns: 1fr 1fr 1fr;
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
