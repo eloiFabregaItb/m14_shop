@@ -52,6 +52,7 @@ import { currencys, items} from './constants'
 
 <style scoped>
   .itemList{
+    
     display: grid;
     gap:1rem;
     grid-template-columns: 1fr 1fr 1fr;
